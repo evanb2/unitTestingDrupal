@@ -1,0 +1,65 @@
+<?php
+
+function title_case_menu() {
+    $items['title_case'] = array(
+        'title' => 'Title Case',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('title_case_form'),
+        'access callback' => TRUE,
+        'type' => MENU_NORMAL_ITEM,
+    );
+    $items['title_success'] = array(
+        'title' => 'YAY!',
+        'page callback' => 'title_case_success',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+    return $items;
+}
+
+function title_case_form() {
+    $form['input'] = array(
+        '#title' => 'Enter Title',
+        '#type' => 'textfield',
+        '#description' => t('Enter Title'),
+        '#required' => TRUE,
+    );
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => 'Enter',
+    );
+    return $form;
+}
+
+function make_title_case($input_title) {
+    $input_title = strtolower($input_title);
+    $input_array_of_words = explode(" ", $input_title);
+    $exclude = array("a", "an", "the", "but", "or", "of", "on", "in", "with", "upon", "for", "to");
+    $output_titlecased = array();
+    $first_word = $input_array_of_words[0];
+    $last_word = end($input_array_of_words);
+    array_push($output_titlecased, ucfirst($first_word));
+    array_shift($input_array_of_words);
+    foreach ($input_array_of_words as $word) {
+        if(in_array($word, $exclude)) {
+            array_push($output_titlecased, $word);
+        } else {
+        array_push($output_titlecased, ucfirst($word));
+    }}
+    array_pop($output_titlecased);
+    array_push($output_titlecased, ucfirst($last_word));
+    $output = implode(" ", $output_titlecased);
+    return $output;
+}
+
+function title_case_form_submit($form, &$form_state) {
+    $input_title = $form_state['values']['input'];
+
+    $_SESSION['output'] = make_title_case($input_title);
+
+    $form_state['redirect'] = 'title_success';
+}
+
+function title_case_success() {
+    return $_SESSION['output'];
+}

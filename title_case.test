@@ -1,0 +1,26 @@
+<?php
+class TitleCaseTest extends DrupalUnitTestCase {
+    public static function getInfo() {
+        return array(
+            'name' => 'Title Case Test',
+            'description' => 'Test that title case module works properly',
+            'group' => 'Examples',
+        );
+    }
+
+    function testTitleCase() {
+        $result = make_title_case('a');
+        $message = 'A valid letter should return A';
+        $this->assertTrue($result, $message);
+
+        $result = make_title_case('the dog');
+        $message = 'A valid string should return The Dog';
+        $this->assertTrue($result, $message);
+
+        $result = make_title_case('it is jon\'s turn to drive');
+        $message = 'A valid statement should return It Is Jon\'s Turn to Drive';
+        $this->assertTrue($result, $message);
+    }
+}
+
+?>

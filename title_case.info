@@ -1,0 +1,6 @@
+name = Title Case Module
+description = Module for converting to title case.
+packages = Epicodus Examples
+core = 7.x
+files[] = title_case.module
+files[] = title_case.test
